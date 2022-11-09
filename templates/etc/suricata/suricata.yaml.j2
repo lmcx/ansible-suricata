@@ -1,0 +1,672 @@
+%YAML 1.1
+---
+
+##
+## Step 1: Inform Suricata about your network
+##
+
+{% if suricata_vars is defined %}
+vars:
+  {{ suricata_vars|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+##
+## Step 2: Select outputs to enable
+##
+
+# The default logging directory.  Any log or output file will be
+# placed here if it's not specified with a full path name. This can be
+# overridden with the -l command line parameter.
+{% if suricata_default_log_dir is defined %}
+default-log-dir: {{ suricata_default_log_dir }}
+{% endif %}
+
+# Global stats configuration
+{% if suricata_stats is defined %}
+stats:
+  {{ suricata_stats|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+# Configure the type of alert (and other) logging you would like.
+{% if suricata_outputs is defined %}
+outputs:
+  {{ suricata_outputs|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+# Logging configuration.  This is not about logging IDS alerts/events, but
+# output about what Suricata is doing, like startup messages, errors, etc.
+{% if suricata_logging is defined %}
+logging:
+  {{ suricata_logging|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+##
+## Step 3: Configure common capture settings
+##
+## See "Advanced Capture Options" below for more options, including Netmap
+## and PF_RING.
+##
+
+# Linux high speed capture support
+{% if suricata_af_packet is defined %}
+af-packet:
+  {{ suricata_af_packet|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+# Cross platform libpcap capture support
+{% if suricata_pcap is defined %}
+pcap:
+  {{ suricata_pcap|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+# Settings for reading pcap files
+{% if suricata_pcap_file is defined %}
+pcap-file:
+  {{ suricata_pcap_file|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+##
+## Step 4: App Layer Protocol configuration
+##
+
+# Configure the app-layer parsers. The protocol's section details each
+# protocol.
+#
+# The option "enabled" takes 3 values - "yes", "no", "detection-only".
+# "yes" enables both detection and the parser, "no" disables both, and
+# "detection-only" enables protocol detection only (parser disabled).
+{% if suricata_app_layer is defined %}
+app-layer:
+  {{ suricata_app_layer|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+# Limit for the maximum number of asn1 frames to decode (default 256)
+{% if suricata_asn1_max_frames is defined %}
+asn1-max-frames: {{ suricata_asn1_max_frames }}
+{% endif %}
+
+# Datasets default settings
+{% if suricata_datasets is defined %}
+datasets:
+  {{ suricata_datasets|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+
+##############################################################################
+##
+## Advanced settings below
+##
+##############################################################################
+
+##
+## Run Options
+##
+
+# Run Suricata with a specific user-id and group-id:
+{% if suricata_run_as is defined %}
+run-as:
+  {{ suricata_run_as|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+# Some logging modules will use that name in event as identifier. The default
+# value is the hostname
+{% if suricata_sensor_name is defined %}
+sensor-name: {{ suricata_sensor_name }}
+{% endif %}
+
+# Default location of the pid file. The pid file is only used in
+# daemon mode (start Suricata with -D). If not running in daemon mode
+# the --pidfile command line option must be used to create a pid file.
+{% if suricata_pid_file is defined %}
+pid-file: {{ suricata_pid_files }}
+{% endif %}
+
+# Daemon working directory
+# Suricata will change directory to this one if provided
+# Default: "/"
+{% if suricata_daemon_directory is defined %}
+daemon-directory: {{ suricata_daemon_directory }}
+{% endif %}
+
+# Umask.
+# Suricata will use this umask if it is provided. By default it will use the
+# umask passed on by the shell.
+{% if suricata_umask is defined %}
+umask: {{ suricata_umask }}
+{% endif %}
+
+# Suricata core dump configuration. Limits the size of the core dump file to
+# approximately max-dump. The actual core dump size will be a multiple of the
+# page size. Core dumps that would be larger than max-dump are truncated. On
+# Linux, the actual core dump size may be a few pages larger than max-dump.
+# Setting max-dump to 0 disables core dumping.
+# Setting max-dump to 'unlimited' will give the full core dump file.
+# On 32-bit Linux, a max-dump value >= ULONG_MAX may cause the core dump size
+# to be 'unlimited'.
+
+{% if suricata_coredump is defined %}
+coredump:
+  {{ suricata_coredump|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+# If the Suricata box is a router for the sniffed networks, set it to 'router'. If
+# it is a pure sniffing setup, set it to 'sniffer-only'.
+# If set to auto, the variable is internally switched to 'router' in IPS mode
+# and 'sniffer-only' in IDS mode.
+# This feature is currently only used by the reject* keywords.
+
+{% if suricata_host_mode is defined %}
+host-mode: {{ suricata_host_mode }}
+{% endif %}
+
+# Number of packets preallocated per thread. The default is 1024. A higher number 
+# will make sure each CPU will be more easily kept busy, but may negatively 
+# impact caching.
+
+{% if suricata_max_pending_packets is defined %}
+max-pending-packets: {{ suricata_max_pending_packets }}
+{% endif %}
+
+# Runmode the engine should use. Please check --list-runmodes to get the available
+# runmodes for each packet acquisition method. Default depends on selected capture
+# method. 'workers' generally gives best performance.
+
+{% if suricata_runmode is defined %}
+runmode: {{ suricata_runmode }}
+{% endif %}
+
+# Specifies the kind of flow load balancer used by the flow pinned autofp mode.
+#
+# Supported schedulers are:
+#
+# hash     - Flow assigned to threads using the 5-7 tuple hash.
+# ippair   - Flow assigned to threads using addresses only.
+#
+
+{% if suricata_autofp_scheduler is defined %}
+autofp-scheduler: {{ suricata_autofp_scheduler }}
+{% endif %}
+
+# Preallocated size for each packet. Default is 1514 which is the classical
+# size for pcap on Ethernet. You should adjust this value to the highest
+# packet size (MTU + hardware header) on your system.
+
+{% if suricata_default_packet_size is defined %}
+default-packet-size: {{ suricata_default_packet_size }}
+{% endif %}
+
+# Unix command socket that can be used to pass commands to Suricata.
+# An external tool can then connect to get information from Suricata
+# or trigger some modifications of the engine. Set enabled to yes
+# to activate the feature. In auto mode, the feature will only be
+# activated in live capture mode. You can use the filename variable to set
+# the file name of the socket.
+
+{% if suricata_unix_command is defined %}
+unix-command:
+  {{ suricata_unix_command|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+# Magic file. The extension .mgc is added to the value here.
+#magic-file: /usr/share/file/magic
+#magic-file: 
+
+{% if suricata_magic_file is defined %}
+magic-file: {{ suricata_magic_file }}
+{% endif %}
+
+# GeoIP2 database file. Specify path and filename of GeoIP2 database
+# if using rules with "geoip" rule option.
+
+{% if suricata_geoip_database is defined %}
+geoip-database: {{ suricata_geoip_database }}
+{% endif %}
+
+
+{% if suricata_legacy is defined %}
+legacy:
+  {{ suricata_legacy|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+##
+## Detection settings
+##
+
+# Set the order of alerts based on actions
+# The default order is pass, drop, reject, alert
+{% if suricata_action_order is defined %}
+action-order:
+  {{ suricata_action_order|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+# Define maximum number of possible alerts that can be triggered for the same
+# packet. Default is 15
+{% if suricata_packet_alert_max is defined %}
+packet-alert-max: {{ suricata_packet_alert_max }}
+{% endif %}
+
+# IP Reputation
+{% if suricata_reputation_categories_file is defined %}
+reputation-categories-file: {{ suricata_reputation_categories_file }}
+{% endif %}
+{% if suricata_default_reputation_path is defined %}
+default-reputation-path: {{ suricata_default_reputation_path }}
+{% endif %}
+{% if suricata_reputation_files is defined %}
+reputation-files:
+  {{ suricata_reputation_files|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+# When run with the option --engine-analysis, the engine will read each of
+# the parameters below, and print reports for each of the enabled sections
+# and exit.  The reports are printed to a file in the default log dir
+# given by the parameter "default-log-dir", with engine reporting
+# subsection below printing reports in its own report file.
+
+{% if suricata_engine_analysis is defined %}
+engine-analysis:
+  {{ suricata_engine_analysis|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+#recursion and match limits for PCRE where supported
+{% if suricata_pcre is defined %}
+pcre:
+  {{ suricata_pcre|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+##
+## Advanced Traffic Tracking and Reconstruction Settings
+##
+
+# Host specific policies for defragmentation and TCP stream
+# reassembly. The host OS lookup is done using a radix tree, just
+# like a routing table so the most specific entry matches.
+
+{% if suricata_host_os_policy is defined %}
+host-os-policy:
+  {{ suricata_host_os_policy|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+# Defrag settings:
+
+{% if suricata_defrag is defined %}
+defrag:
+  {{ suricata_defrag|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+# Enable defrag per host settings
+{% if suricata_host_config is defined %}
+host-config:
+  {{ suricata_host_config|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+# Flow settings:
+# By default, the reserved memory (memcap) for flows is 32MB. This is the limit
+# for flow allocation inside the engine. You can change this value to allow
+# more memory usage for flows.
+# The hash-size determines the size of the hash used to identify flows inside
+# the engine, and by default the value is 65536.
+# At startup, the engine can preallocate a number of flows, to get better
+# performance. The number of flows preallocated is 10000 by default.
+# emergency-recovery is the percentage of flows that the engine needs to
+# prune before clearing the emergency state. The emergency state is activated
+# when the memcap limit is reached, allowing new flows to be created, but
+# pruning them with the emergency timeouts (they are defined below).
+# If the memcap is reached, the engine will try to prune flows
+# with the default timeouts. If it doesn't find a flow to prune, it will set
+# the emergency bit and it will try again with more aggressive timeouts.
+# If that doesn't work, then it will try to kill the oldest flows using
+# last time seen flows.
+# The memcap can be specified in kb, mb, gb.  Just a number indicates it's
+# in bytes.
+
+{% if suricata_flow is defined %}
+flow:
+  {{ suricata_flow|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+# This option controls the use of VLAN ids in the flow (and defrag)
+# hashing. Normally this should be enabled, but in some (broken)
+# setups where both sides of a flow are not tagged with the same VLAN
+# tag, we can ignore the VLAN id's in the flow hashing.
+
+{% if suricata_vlan is defined %}
+vlan:
+  {{ suricata_vlan|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+# Specific timeouts for flows. Here you can specify the timeouts that the
+# active flows will wait to transit from the current state to another, on each
+# protocol. The value of "new" determines the seconds to wait after a handshake or
+# stream startup before the engine frees the data of that flow it doesn't
+# change the state to established (usually if we don't receive more packets
+# of that flow). The value of "established" is the amount of
+# seconds that the engine will wait to free the flow if that time elapses
+# without receiving new packets or closing the connection. "closed" is the
+# amount of time to wait after a flow is closed (usually zero). "bypassed"
+# timeout controls locally bypassed flows. For these flows we don't do any other
+# tracking. If no packets have been seen after this timeout, the flow is discarded.
+#
+# There's an emergency mode that will become active under attack circumstances,
+# making the engine to check flow status faster. This configuration variables
+# use the prefix "emergency-" and work similar as the normal ones.
+# Some timeouts doesn't apply to all the protocols, like "closed", for udp and
+# icmp.
+
+{% if suricata_flow_timeouts is defined %}
+flow-timeouts:
+  {{ suricata_flow_timeouts|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+# Stream engine settings. Here the TCP stream tracking and reassembly
+# engine is configured.
+#
+# stream:
+#   memcap: 64mb                # Can be specified in kb, mb, gb.  Just a
+#                               # number indicates it's in bytes.
+#   checksum-validation: yes    # To validate the checksum of received
+#                               # packet. If csum validation is specified as
+#                               # "yes", then packets with invalid csum values will not
+#                               # be processed by the engine stream/app layer.
+#                               # Warning: locally generated traffic can be
+#                               # generated without checksum due to hardware offload
+#                               # of checksum. You can control the handling of checksum
+#                               # on a per-interface basis via the 'checksum-checks'
+#                               # option
+#   prealloc-sessions: 2k       # 2k sessions prealloc'd per stream thread
+#   midstream: false            # don't allow midstream session pickups
+#   async-oneside: false        # don't enable async stream handling
+#   inline: no                  # stream inline mode
+#   drop-invalid: yes           # in inline mode, drop packets that are invalid with regards to streaming engine
+#   max-synack-queued: 5        # Max different SYN/ACKs to queue
+#   bypass: no                  # Bypass packets when stream.reassembly.depth is reached.
+#                               # Warning: first side to reach this triggers
+#                               # the bypass.
+#
+#   reassembly:
+#     memcap: 256mb             # Can be specified in kb, mb, gb.  Just a number
+#                               # indicates it's in bytes.
+#     depth: 1mb                # Can be specified in kb, mb, gb.  Just a number
+#                               # indicates it's in bytes.
+#     toserver-chunk-size: 2560 # inspect raw stream in chunks of at least
+#                               # this size.  Can be specified in kb, mb,
+#                               # gb.  Just a number indicates it's in bytes.
+#     toclient-chunk-size: 2560 # inspect raw stream in chunks of at least
+#                               # this size.  Can be specified in kb, mb,
+#                               # gb.  Just a number indicates it's in bytes.
+#     randomize-chunk-size: yes # Take a random value for chunk size around the specified value.
+#                               # This lowers the risk of some evasion techniques but could lead
+#                               # to detection change between runs. It is set to 'yes' by default.
+#     randomize-chunk-range: 10 # If randomize-chunk-size is active, the value of chunk-size is
+#                               # a random value between (1 - randomize-chunk-range/100)*toserver-chunk-size
+#                               # and (1 + randomize-chunk-range/100)*toserver-chunk-size and the same
+#                               # calculation for toclient-chunk-size.
+#                               # Default value of randomize-chunk-range is 10.
+#
+#     raw: yes                  # 'Raw' reassembly enabled or disabled.
+#                               # raw is for content inspection by detection
+#                               # engine.
+#
+#     segment-prealloc: 2048    # number of segments preallocated per thread
+#
+#     check-overlap-different-data: true|false
+#                               # check if a segment contains different data
+#                               # than what we've already seen for that
+#                               # position in the stream.
+#                               # This is enabled automatically if inline mode
+#                               # is used or when stream-event:reassembly_overlap_different_data;
+#                               # is used in a rule.
+#
+
+{% if suricata_stream is defined %}
+stream:
+  {{ suricata_stream|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+# Host table:
+#
+# Host table is used by the tagging and per host thresholding subsystems.
+#
+
+{% if suricata_host is defined %}
+host:
+  {{ suricata_host|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+# IP Pair table:
+#
+# Used by xbits 'ippair' tracking.
+#
+
+{% if suricata_ippair is defined %}
+ippair:
+  {{ suricata_ippair|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+# Decoder settings
+
+{% if suricata_decoder is defined %}
+decoder:
+  {{ suricata_decoder|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+##
+## Performance tuning and profiling
+##
+
+# The detection engine builds internal groups of signatures. The engine
+# allows us to specify the profile to use for them, to manage memory in an
+# efficient way keeping good performance. For the profile keyword you
+# can use the words "low", "medium", "high" or "custom". If you use custom,
+# make sure to define the values in the "custom-values" section.
+# Usually you would prefer medium/high/low.
+#
+# "sgh mpm-context", indicates how the staging should allot mpm contexts for
+# the signature groups.  "single" indicates the use of a single context for
+# all the signature group heads.  "full" indicates a mpm-context for each
+# group head.  "auto" lets the engine decide the distribution of contexts
+# based on the information the engine gathers on the patterns from each
+# group head.
+#
+# The option inspection-recursion-limit is used to limit the recursive calls
+# in the content inspection code.  For certain payload-sig combinations, we
+# might end up taking too much time in the content inspection code.
+# If the argument specified is 0, the engine uses an internally defined
+# default limit.  When a value is not specified, there are no limits on the recursion.
+
+{% if suricata_detect is defined %}
+detect:
+  {{ suricata_detect|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+# Select the multi pattern algorithm you want to run for scan/search the
+# in the engine.
+#
+# The supported algorithms are:
+# "ac"      - Aho-Corasick, default implementation
+# "ac-bs"   - Aho-Corasick, reduced memory implementation
+# "ac-ks"   - Aho-Corasick, "Ken Steele" variant
+# "hs"      - Hyperscan, available when built with Hyperscan support
+#
+# The default mpm-algo value of "auto" will use "hs" if Hyperscan is
+# available, "ac" otherwise.
+#
+# The mpm you choose also decides the distribution of mpm contexts for
+# signature groups, specified by the conf - "detect.sgh-mpm-context".
+# Selecting "ac" as the mpm would require "detect.sgh-mpm-context"
+# to be set to "single", because of ac's memory requirements, unless the
+# ruleset is small enough to fit in memory, in which case one can
+# use "full" with "ac".  The rest of the mpms can be run in "full" mode.
+
+{% if suricata_mpm_algo is defined %}
+mpm-algo: {{ suricata_mpm_algo }}
+{% endif %}
+
+# Select the matching algorithm you want to use for single-pattern searches.
+#
+# Supported algorithms are "bm" (Boyer-Moore) and "hs" (Hyperscan, only
+# available if Suricata has been built with Hyperscan support).
+#
+# The default of "auto" will use "hs" if available, otherwise "bm".
+
+{% if suricata_spm_algo is defined %}
+spm-algo: {{ suricata_spm_algo }}
+{% endif %}
+
+# Suricata is multi-threaded. Here the threading can be influenced.
+{% if suricata_threading is defined %}
+threading:
+  {{ suricata_threading|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+# Luajit has a strange memory requirement, its 'states' need to be in the
+# first 2G of the process' memory.
+#
+# 'luajit.states' is used to control how many states are preallocated.
+# State use: per detect script: 1 per detect thread. Per output script: 1 per
+# script.
+
+{% if suricata_luajit is defined %}
+luajit:
+  {{ suricata_luajit|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+# Profiling settings. Only effective if Suricata has been built with
+# the --enable-profiling configure flag.
+#
+
+{% if suricata_profiling is defined %}
+profiling:
+  {{ suricata_profiling|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+##
+## Netfilter integration
+##
+
+# When running in NFQ inline mode, it is possible to use a simulated
+# non-terminal NFQUEUE verdict.
+# This permits sending all needed packet to Suricata via this rule:
+#        iptables -I FORWARD -m mark ! --mark $MARK/$MASK -j NFQUEUE
+# And below, you can have your standard filtering ruleset. To activate
+# this mode, you need to set mode to 'repeat'
+# If you want a packet to be sent to another queue after an ACCEPT decision
+# set the mode to 'route' and set next-queue value.
+# On Linux >= 3.1, you can set batchcount to a value > 1 to improve performance
+# by processing several packets before sending a verdict (worker runmode only).
+# On Linux >= 3.6, you can set the fail-open option to yes to have the kernel
+# accept the packet if Suricata is not able to keep pace.
+# bypass mark and mask can be used to implement NFQ bypass. If bypass mark is
+# set then the NFQ bypass is activated. Suricata will set the bypass mark/mask
+# on packet of a flow that need to be bypassed. The Nefilter ruleset has to
+# directly accept all packets of a flow once a packet has been marked.
+
+{% if suricata_nfq is defined %}
+nfq:
+  {{ suricata_nfq|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+#nflog support
+{% if suricata_nflog is defined %}
+nflog:
+  {{ suricata_nflog|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+##
+## Advanced Capture Options
+##
+
+# General settings affecting packet capture
+{% if suricata_capture is defined %}
+capture:
+  {{ suricata_capture|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+# Netmap support
+#
+# Netmap operates with NIC directly in driver, so you need FreeBSD 11+ which has
+# built-in Netmap support or compile and install the Netmap module and appropriate
+# NIC driver for your Linux system.
+# To reach maximum throughput disable all receive-, segmentation-,
+# checksum- offloading on your NIC (using ethtool or similar).
+# Disabling TX checksum offloading is *required* for connecting OS endpoint
+# with NIC endpoint.
+# You can find more information at https://github.com/luigirizzo/netmap
+#
+
+{% if suricata_netmap is defined %}
+netmap:
+  {{ suricata_netmap|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+
+# PF_RING configuration: for use with native PF_RING support
+# for more info see http://www.ntop.org/products/pf_ring/
+
+{% if suricata_pfring is defined %}
+pfring:
+  {{ suricata_pfring|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+
+# For FreeBSD ipfw(8) divert(4) support.
+# Please make sure you have ipfw_load="YES" and ipdivert_load="YES"
+# in /etc/loader.conf or kldload'ing the appropriate kernel modules.
+# Additionally, you need to have an ipfw rule for the engine to see
+# the packets from ipfw.  For Example:
+#
+#   ipfw add 100 divert 8000 ip from any to any
+#
+# N.B. This example uses "8000" -- this number must mach the values
+# you passed on the command line, i.e., -d 8000
+#
+
+{% if suricata_ipfw is defined %}
+ipfw:
+  {{ suricata_ipfw|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+{% if suricata_napatech is defined %}
+napatech:
+  {{ suricata_napatech|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+
+##
+## Configure Suricata to load Suricata-Update managed rules.
+##
+
+{% if suricata_default_rule_path is defined %}
+default-rule-path: {{ suricata_default_rule_path }}
+{% endif %}
+
+{% if suricata_rule_files is defined %}
+rule-files:
+  {{ suricata_rule_files|to_nice_yaml(indent=2, sort_keys=false)|indent(2) }}
+{% endif %}
+
+##
+## Auxiliary configuration files.
+##
+
+{% if suricata_classification_file is defined %}
+classification-file: {{ suricata_classification_file }}
+{% endif %}
+{% if suricata_reference_config_file is defined %}
+reference-config-file: {{ suricata_reference_config_file }}
+{% endif %}
+{% if suricata_threshold_file is defined %}
+threshold-file: {{ suricata_threshold_file }}
+{% endif %}
+
+##
+## Include other configs
+##
+
+# Includes:  Files included here will be handled as if they were in-lined
+# in this configuration file. Files with relative pathnames will be
+# searched for in the same directory as this configuration file. You may
+# use absolute pathnames too.
+# You can specify more than 2 configuration files, if needed.
+#include: include1.yaml
+#include: include2.yaml
