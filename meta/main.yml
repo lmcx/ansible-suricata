@@ -9,27 +9,27 @@ galaxy_info:
   min_ansible_version: 2.1
 
   platforms:
-  - name: Fedora
-    versions:
-      - 22
-      - 23
-      - 24
-      - 25
-      - 26
-      - 27
-      - 28
-      - 29
-      - 30
-      - 31
-      - 32
-      - 33
-      - 34
-      - 35
-      - 36
-  - name: EL
-    versions:
-      - 8
-      - 9
+    - name: Fedora
+      versions:
+        - 22
+        - 23
+        - 24
+        - 25
+        - 26
+        - 27
+        - 28
+        - 29
+        - 30
+        - 31
+        - 32
+        - 33
+        - 34
+        - 35
+        - 36
+    - name: EL
+      versions:
+        - 8
+        - 9
 
   galaxy_tags: [networking, security, ids, ips]
 
