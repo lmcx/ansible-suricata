@@ -15,12 +15,6 @@ Suricata configuration file location :
 
     suricata_conf_file: "/etc/suricata/suricata.yaml"
 
-Enabled rule sets :
-
-    suricata_rule_files:
-      - suricata.rules
-      - example/example.rules
-
 Custom rules directory :
 
     suricata_local_rules_dir: "files/suricata/rules"
@@ -74,6 +68,9 @@ These variables should contain strings if defined :
 For more information about how to configure Suricata, please refere to the official [Suricata configuration](https://suricata.io/documentation/) and use this list to apply your configuration to this Ansible role.
 
 The default configuration provided with this role is a 1:1 translation of the one provided with Suricata on the official Fedora repositories. It can be overloaded field by field or, obviously, fully rewritten. Please refer to `defaults/main.yml` for more information on the default values.
+
+If some files are present in the directory specified in `suricata_local_rules_dir`, they will be automatically uploaded to `suricata_default_rule_path` and append to the rule-files list in `suricata_rule_files`. You can still enable/disable rules that are not managed through Ansible by removing them from the `suricata_rule_files` list in your configuration.
+
 
 Dependencies
 ------------
