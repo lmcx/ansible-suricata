@@ -1,5 +1,10 @@
 ---
-- name: "[RedHat] (dnf) Install suricata"
-  ansible.builtin.dnf:
+- name: "[Redhat] (yum) Install EPEL release"
+  ansible.builtin.yum:
+    name: "epel-release"
+    state: present
+
+- name: "[RedHat] (yum) Install suricata"
+  ansible.builtin.yum:
     name: "suricata"
     state: present
