@@ -1,0 +1,5 @@
+---
+- name: "[Fedora] (dnf) Install suricata"
+  ansible.builtin.dnf:
+    name: "suricata"
+    state: present
