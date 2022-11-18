@@ -1,0 +1,5 @@
+---
+- name: "[Debian] (apt) Install suricata"
+  ansible.builtin.apt:
+    name: suricata
+    state: present
