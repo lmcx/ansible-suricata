@@ -17,6 +17,11 @@
   with_items: "{{ dir_out.stdout_lines }}"
   when: dir_out is defined and suricata_default_rule_path is defined and suricata_default_rule_path != "" and suricata_local_rules_dir is defined and suricata_local_rules_dir != ""
 
+- name: Debug custom rules registering
+  ansible.builtin.debug:
+    msg: "{{ dir_out }}"
+  when: dir_out is defined
+
 - name: "Register custom rules"
   ansible.builtin.set_fact:
     suricata_custom_rules: "{{ dir_out.stdout_lines }}"
