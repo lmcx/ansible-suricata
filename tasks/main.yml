@@ -1,4 +1,9 @@
 ---
-- ansible.builtin.include_tasks: install.yml
-- ansible.builtin.include_tasks: configure.yml
-- ansible.builtin.include_tasks: enable.yml
+- name: "Include installation tasks"
+  ansible.builtin.include_tasks: install.yml
+
+- name: "Include configuration tasks"
+  ansible.builtin.include_tasks: configure.yml
+
+- name: "Include service enabling tasks"
+  ansible.builtin.include_tasks: enable.yml
