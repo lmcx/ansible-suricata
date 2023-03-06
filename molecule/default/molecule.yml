@@ -3,9 +3,13 @@ dependency:
   name: galaxy
 driver:
   name: docker
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
 platforms:
   - name: bind_fedora37
-    image: registry.fedoraproject.org/fedora:37
+    image: geerlingguy/docker-fedora37-ansible:latest
     pre_build_image: true
 provisioner:
   name: ansible
