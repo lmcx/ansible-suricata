@@ -1,4 +1,7 @@
 ---
+- name: Debug github actions include error
+  debug:
+    msg: "{{ ansible_distribution | lower }} {{ ansible_distribution_major_version | lower }} {{ ansible_distribution_version | lower }} {{ ansible_distribution_release | lower }} {{ ansible_distribution | lower }} {{ ansible_os_family | lower }}"
 - name: System specific suricata installation
   ansible.builtin.include_tasks:
     file: "{{ item }}"
