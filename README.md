@@ -1,6 +1,8 @@
 Ansible Role: Suricata
 ======================
 
+![CI](https://github.com/lmcx/ansible-suricata/actions/workflows/ci.yml/badge.svg?branch=${GH_BRANCH})
+
 An Ansible role that installs and configures [Suricata](https://suricata.io/) IDS/IPS
 
 Requirements
