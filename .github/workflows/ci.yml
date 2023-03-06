@@ -8,16 +8,6 @@ name: CI
       - develop
 
 jobs:
-  update_readme:
-    name: Update Readme
-    runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    steps:
-      - name: github-update-readme
-        uses: theboi/github-update-readme@v1.3.0
-
   test:
     name: Molecule
     runs-on: ubuntu-latest
