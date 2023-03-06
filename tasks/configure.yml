@@ -4,6 +4,7 @@
   register: dir_out
   when: suricata_local_rules_dir is defined and suricata_local_rules_dir != ""
   become: false
+  changed_when: dir_out.rc != 0
 
 - name: "Upload custom rules"
   ansible.builtin.copy:
@@ -13,7 +14,7 @@
     group: "{{ suricata_group }}"
     mode: '0644'
   with_items: "{{ dir_out.stdout_lines }}"
-  when: suricata_default_rule_path is defined and suricata_default_rule_path != "" and suricata_local_rules_dir is defined and suricata_local_rules_dir != ""
+  when: dir_out is defined and suricata_default_rule_path is defined and suricata_default_rule_path != "" and suricata_local_rules_dir is defined and suricata_local_rules_dir != ""
 
 - name: "Register custom rules"
   ansible.builtin.set_fact:
