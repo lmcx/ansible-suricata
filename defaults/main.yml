@@ -72,27 +72,27 @@ suricata_outputs:
         - files:
             force-magic: "no"
         - smtp:
-        - ftp
-        - rdp
-        - nfs
-        - smb
-        - tftp
-        - ikev2
-        - dcerpc
-        - krb5
-        - snmp
-        - rfb
-        - sip
+        - ftp:
+        - rdp:
+        - nfs:
+        - smb:
+        - tftp:
+        - ikev2:
+        - dcerpc:
+        - krb5:
+        - snmp:
+        - rfb:
+        - sip:
         - dhcp:
             enabled: "yes"
             extended: "no"
-        - ssh
+        - ssh:
         - mqtt:
         - stats:
             totals: "yes"
             threads: "no"
             deltas: "no"
-        - flow
+        - flow:
   - http-log:
       enabled: "no"
       filename: http.log
@@ -154,16 +154,16 @@ suricata_logging:
   default-log-level: notice
   default-output-filter:
   outputs:
-  - console:
-      enabled: "yes"
-  - file:
-      enabled: "yes"
-      level: info
-      filename: suricata.log
-  - syslog:
-      enabled: "no"
-      facility: local5
-      format: "[%i] <%d> -- "
+    - console:
+        enabled: "yes"
+    - file:
+        enabled: "yes"
+        level: info
+        filename: suricata.log
+    - syslog:
+        enabled: "no"
+        facility: local5
+        format: "[%i] <%d> -- "
 
 suricata_af_packet:
   - interface: eth0
@@ -242,24 +242,24 @@ suricata_app_layer:
     http:
       enabled: "yes"
       libhtp:
-         default-config:
-           personality: IDS
-           request-body-limit: 100kb
-           response-body-limit: 100kb
-           request-body-minimal-inspect-size: 32kb
-           request-body-inspect-window: 4kb
-           response-body-minimal-inspect-size: 40kb
-           response-body-inspect-window: 16kb
-           response-body-decompress-layer-limit: 2
-           http-body-inline: auto
-           swf-decompression:
-             enabled: "yes"
-             type: both
-             compress-depth: 100kb
-             decompress-depth: 100kb
-           double-decode-path: "no"
-           double-decode-query: "no"
-         server-config:
+        default-config:
+          personality: IDS
+          request-body-limit: 100kb
+          response-body-limit: 100kb
+          request-body-minimal-inspect-size: 32kb
+          request-body-inspect-window: 4kb
+          response-body-minimal-inspect-size: 40kb
+          response-body-inspect-window: 16kb
+          response-body-decompress-layer-limit: 2
+          http-body-inline: auto
+          swf-decompression:
+            enabled: "yes"
+            type: both
+            compress-depth: 100kb
+            decompress-depth: 100kb
+          double-decode-path: "no"
+          double-decode-query: "no"
+        server-config:
     modbus:
       enabled: "no"
       detection-ports:
@@ -370,7 +370,15 @@ suricata_defrag:
 # suricata_host_config:
 #   - dmz:
 #     timeout: 30
-#     address: [192.168.1.0/24, 127.0.0.0/8, 1.1.1.0/24, 2.2.2.0/24, "1.1.1.1", "2.2.2.2", "::1"]
+#     address: [
+#       192.168.1.0/24,
+#       127.0.0.0/8,
+#       1.1.1.0/24,
+#       2.2.2.0/24,
+#       "1.1.1.1",
+#       "2.2.2.2",
+#       "::1"
+#     ]
 #   - lan:
 #     timeout: 45
 #     address:
