@@ -617,7 +617,7 @@ suricata_napatech:
     auto-config: "yes"
     hardware-bypass: "yes"
     inline: "no"
-    ports: [0-1,2-3]
+    ports: [0-1, 2-3]
     hashmode: hash5tuplesorted
 
 suricata_default_rule_path: /var/lib/suricata/rules
