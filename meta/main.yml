@@ -1,4 +1,5 @@
 galaxy_info:
+  role_name: suricata
   author: lmcx
   description: Ansible role for Suricata IDS/IPS
 
