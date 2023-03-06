@@ -1,4 +1,7 @@
 ---
+- name: Gather facts
+  ansible.builtin.gather_facts:
+
 - name: Debug github actions include error
   ansible.builtin.debug:
     msg: "{{ ansible_distribution | lower }} {{ ansible_distribution_major_version | lower }} {{ ansible_distribution_version | lower }} {{ ansible_distribution_release | lower }} {{ ansible_distribution | lower }} {{ ansible_os_family | lower }}"
