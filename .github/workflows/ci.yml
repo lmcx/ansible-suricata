@@ -11,6 +11,8 @@ jobs:
   update_readme:
     name: Update Readme
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - name: github-update-readme
