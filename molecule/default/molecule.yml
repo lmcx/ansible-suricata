@@ -1,0 +1,13 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: bind_fedora37
+    image: registry.fedoraproject.org/fedora:37
+    pre_build_image: true
+provisioner:
+  name: ansible
+verifier:
+  name: ansible
