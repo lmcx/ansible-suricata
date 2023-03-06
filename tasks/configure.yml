@@ -1,9 +1,10 @@
 ---
 - name: "List local rules directory"
-  local_action: ansible.builtin.command ls {{ playbook_dir }}/{{ suricata_local_rules_dir }}
+  ansible.builtin.command: "ls {{ playbook_dir }}/{{ suricata_local_rules_dir }}"
   register: dir_out
   when: suricata_local_rules_dir is defined and suricata_local_rules_dir != ""
   become: false
+  delegate_to: localhost
   changed_when: dir_out.rc != 0
 
 - name: "Upload custom rules"
@@ -22,14 +23,14 @@
   when: dir_out is defined
 
 - name: "Find local rules paths"
-  local_action: 
-    module: ansible.builtin.find
+  ansible.builtin.find:
     path: "{{ playbook_dir }}/{{ suricata_local_rules_dir }}/"
     file_type: file
     recurse: yes
   register: rules_list
   when: suricata_local_rules_dir is defined and suricata_local_rules_dir != ""
   become: false
+  delegate_to: localhost
   no_log: true
 
 - name: "Set rules list if not defined"
