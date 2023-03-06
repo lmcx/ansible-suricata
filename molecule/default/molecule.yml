@@ -4,9 +4,9 @@ dependency:
 driver:
   name: docker
 lint: |
-  set -e
-  yamllint .
-  ansible-lint
+    set -e
+    yamllint .
+    ansible-lint
 platforms:
   - name: bind_fedora37
     image: geerlingguy/docker-fedora37-ansible:latest
