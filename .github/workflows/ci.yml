@@ -30,3 +30,6 @@ jobs:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
       
+      - name: github-update-readme
+        uses: theboi/github-update-readme@v1.3.0
+      
