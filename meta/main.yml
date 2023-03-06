@@ -27,8 +27,6 @@ galaxy_info:
         - 35
         - 36
         - 37
-    - name: EL
-    - name: Debian
 
   galaxy_tags: [networking, security, ids, ips]
 
