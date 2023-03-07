@@ -8,8 +8,8 @@ lint: |
   yamllint .
   ansible-lint
 platforms:
-  - name: bind_fedora37
-    image: geerlingguy/docker-fedora37-ansible:latest
+  - name: bind_fedora36
+    image: geerlingguy/docker-fedora36-ansible:latest
     pre_build_image: true
 provisioner:
   name: ansible
