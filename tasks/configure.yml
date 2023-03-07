@@ -31,7 +31,7 @@
   when: suricata_local_rules_dir is defined and suricata_local_rules_dir != ""
   become: false
   delegate_to: localhost
-  no_log: true
+  # no_log: true
 
 - name: "Set rules list if not defined"
   ansible.builtin.set_fact:
@@ -42,7 +42,7 @@
   ansible.builtin.set_fact:
     suricata_rule_files: "{{ suricata_rule_files + [item.path | regex_replace(playbook_dir, '') | regex_replace(suricata_local_rules_dir, '') | regex_replace('^/+(.*)$', '\\1')] }}"
   with_items: "{{ rules_list.files }}"
-  no_log: true
+  # no_log: true
 
 - name: "Configure suricata"
   ansible.builtin.template:
