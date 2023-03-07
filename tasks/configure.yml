@@ -42,6 +42,7 @@
   ansible.builtin.set_fact:
     suricata_rule_files: "{{ suricata_rule_files + [item.path | regex_replace(playbook_dir, '') | regex_replace(suricata_local_rules_dir, '') | regex_replace('^/+(.*)$', '\\1')] }}"
   with_items: "{{ rules_list.files }}"
+  when: rules_list is defined and "files" in rules_list
   # no_log: true
 
 - name: "Configure suricata"
