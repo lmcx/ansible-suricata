@@ -1,20 +1,4 @@
 ---
-- name: Debug "systemctl start suricata"
-  ansible.builtin.command: "systemctl start suricata"
-  register: output
-
-- name: Debug print last command output
-  ansible.builtin.debug:
-    msg: "{{ output }}"
-
-- name: Debug "systemctl status suricata"
-  ansible.builtin.command: "systemctl status suricata"
-  register: output
-
-- name: Debug print last command output
-  ansible.builtin.debug:
-    msg: "{{ output }}"
-
 - name: Start and enable Suricata
   ansible.builtin.systemd:
     name: suricata
