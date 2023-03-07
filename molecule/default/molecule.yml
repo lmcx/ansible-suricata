@@ -8,7 +8,7 @@ lint: |
   yamllint .
   ansible-lint
 platforms:
-  - name: bind_fedora37
+  - name: suricata_fedora37
     image: geerlingguy/docker-fedora37-ansible:latest
     command: ""
     volumes:
