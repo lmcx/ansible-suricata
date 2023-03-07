@@ -8,7 +8,7 @@ lint: |
   yamllint .
   ansible-lint
 platforms:
-  - name: bind_fedora36
+  - name: bind_fedora37
     image: geerlingguy/docker-fedora37-ansible:latest
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
