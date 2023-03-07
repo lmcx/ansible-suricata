@@ -2,5 +2,7 @@
 - name: Start and enable Suricata
   ansible.builtin.systemd:
     name: suricata
-    state: restarted
+    state: started
     enabled: yes
+
+# TODO: Restart if configuration changed ?
